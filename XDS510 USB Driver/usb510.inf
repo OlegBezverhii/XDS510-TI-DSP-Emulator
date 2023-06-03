@@ -1,0 +1,108 @@
+[Version]
+Signature="$CHICAGO$"
+Class=%DeviceClassName%
+ClassGuid={c771678D-82c1-43f3-d700-0049433e9a4a}
+provider=%TI%
+DriverVer=6/20/2006,3.20
+LayoutFile=layout.inf
+
+[ClassInstall]
+Addreg=TdsjtagClassReg
+CopyFiles=Files.Class
+
+[ClassInstall32]
+Addreg=TdsjtagClassReg32
+CopyFiles=Files.Class
+
+[TdsjtagClassReg]
+HKR,,,0,%DeviceClassName%
+HKR,,Icon,,101
+
+[TdsjtagClassReg32]
+HKR,,,0,%DeviceClassName%
+HKR,,Icon,,101
+
+[Manufacturer]
+%TI%=TI
+
+[TI]
+%USB\VID_0b1e&PID_0006.DeviceDesc%=TIDEV.Dev,USB\VID_0B1E&PID_0006
+
+%USB\VID_1105&PID_e001.DeviceDesc%=TIDEV.Dev, USB\VID_1105&PID_e001
+%USB\VID_1105&PID_f001.DeviceDesc%=TI.Dev, USB\VID_1105&PID_f001
+
+[PreCopySection]
+HKR,,NoSetupUI,,1
+
+[DestinationDirs]
+Files.Ext = 10,System32\Drivers
+;Files.Inf = 10,INF
+
+[TI.Dev]
+CopyFiles=Files.Ext
+AddReg=TI.AddReg
+
+[TI.Dev.NT]
+; copyfiles commented out for Win2K to avoid user intervention during install
+CopyFiles=Files.Ext
+AddReg=TI.AddReg
+
+[TI.Dev.NT.Services]
+Addservice = TI, 0x00000002, TI.AddService
+
+[TI.AddService]
+DisplayName    = %TI.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\usb510.sys
+LoadOrderGroup = Base
+
+[TI.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usb510.sys
+
+[Files.Ext]
+usb510.sys
+usb2fw.sys
+
+[Files.Inf]
+usb510.Inf
+
+[Files.Class]
+
+[TIDEV.Dev]
+CopyFiles=Files.Ext
+AddReg=TIDEV.AddReg
+
+[TIDEV.Dev.NT]
+; copyfiles commented out for Win2K to avoid user intervention during install
+CopyFiles=Files.Ext
+AddReg=TIDEV.AddReg
+
+[TIDEV.Dev.NT.Services]
+Addservice = upload, 0x00000002, TIDEV.AddService
+
+[TIDEV.AddService]
+DisplayName    = %TIDEV.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %10%\System32\Drivers\usb2fw.sys
+LoadOrderGroup = Base
+
+[TIDEV.AddReg]
+HKR,,DevLoader,,*ntkern
+HKR,,NTMPDriver,,usb2fw.sys
+
+
+;---------------------------------------------------------------;
+
+[Strings]
+TI="WWW.TI.COM"
+DeviceClassName="Texas Instruments Emulators"
+USB\VID_1105&PID_f001.DeviceDesc="XDS510-USB2.0"
+USB\VID_1105&PID_e001.DeviceDesc="XDS510-USB2.0(uploading..)"
+USB\VID_0b1e&PID_0006.DeviceDesc="XDS510-USB2.0(uploading)"
+TI.SvcDesc="XDS510-USB2.0(CN)"
+TIDEV.SvcDesc="XDS510-USB2.0(uploading)"
